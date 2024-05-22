@@ -84,10 +84,30 @@ const skip = async () => {
   })
 }
 
-onMounted(() => {
+onMounted(async () => {
   nextText()
   audioElement.value.volume = 1
   audioElement.value.play()
+
+  const token = useCookie('token')
+  const skipScenario = useCookie('skipScenario')
+  const openChallenge = useCookie('openChallenge')
+
+  const { data, status, error } = await useFetch('http://localhost:8000/api/rank-list/rank/user', {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + token.value,
+      'Content-Type': 'application/json'
+    }
+  })
+
+  if (status.value === 'success') {
+    if (openChallenge.value == 3) {
+      skipScenario.value = true
+    } else {
+      skipScenario.value = false
+    }
+  }
 })
 </script>
 
