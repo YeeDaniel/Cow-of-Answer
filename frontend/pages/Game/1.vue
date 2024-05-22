@@ -45,12 +45,8 @@ const volume = ref(1)
 // Timer
 const gameStartTime = ref(null)
 const pauseTime = ref(null)
-const savedGameStartTime = ref(null)
 const second = ref(0)
 const timerId = ref(null)
-
-// Random redirect
-const redirectLink = ref('')
 
 // Bonus
 const showBonus = ref(false)
@@ -113,7 +109,6 @@ const updateRedirect = async () => {
   const randomNumber = Math.random()
   if (randomNumber < 0.9) {
     showBonus.value = true
-    redirectLink.value = ''
     isBookRightPageInvisible.value = false
     isBookLeftPageInvisible.value = false
     setTimeout(() => {
@@ -183,7 +178,6 @@ const resumeTimer = () => {
 
 const stopTimer = () => {
   clearInterval(timerId.value)
-  savedGameStartTime.value = gameStartTime.value
   // console.log('Time stopped')
 }
 
@@ -363,7 +357,7 @@ const handleClick = async () => {
     body: {
       user_id: parseInt(userid.value),
       challenge_number: 1,
-      best_time: parseInt(savedGameStartTime.value)
+      best_time: parseInt(second.value)
     }
   })
 
@@ -450,7 +444,7 @@ const handleBookClick = () => {
         v-if="isBookRightPageInvisible"
         class="bookRightPage absolute left-[50%] top-[10%] z-auto h-[31.5rem] w-[22.5rem] border-[6px] border-solid border-bookPageBorder bg-bookPage"
       >
-        <div class="h-[80%] w-auto pl-[5%] pr-[5%] pt-[50%] text-center text-5xl">
+        <div class="h-[80%] w-auto pl-[5%] pr-[5%] pt-[50%] text-left text-5xl">
           <div v-if="isFading" v-text="answer" class="animation-fade-in font-shu text-answer"></div>
         </div>
         <div class="h-[20%] w-auto p-[5%]">
